@@ -29,7 +29,8 @@ def _get(path):
 # %%
 ## PEGAR LINHA
 
-line = _get("Linha/Buscar?termosBusca=8000")
+line = _get("Linha/Buscar?termosBusca=2")
 j = json.dumps(line,ensure_ascii=True)
 data = json.loads(j)
 print(data)
+# %%
