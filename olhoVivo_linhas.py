@@ -29,8 +29,11 @@ def _get(path):
 # %%
 ## PEGAR LINHA
 
-line = _get("Linha/Buscar?termosBusca=2")
-j = json.dumps(line,ensure_ascii=True)
-data = json.loads(j)
-print(data)
+#Armazenar letreiros
+letreiros_encontrados = []
+
+#iterar sobre os numeros 1 a 89
+for i in range(1,99):
+    
+
 # %%
