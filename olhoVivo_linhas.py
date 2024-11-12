@@ -39,7 +39,7 @@ for termo in termos_de_busca:
 ## REMOÇÃO DE DUPLICATAS
 resultados_unicos = {linha['cl']: linha for linha in resultados_combinados}.values()
 
-##RESULTADO
+##PRINT RESULTADO
 j = json.dumps(list(resultados_unicos),ensure_ascii=True)
 data = json.loads(j)
 print(data)
