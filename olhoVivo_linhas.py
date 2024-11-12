@@ -1,9 +1,13 @@
 # %%
 import requests
 import json
-import time
+import os
+from dotenv import load_dotenv
 
-# %%
+#%%
+## Carregar as variáveis de ambiente
+load_dotenv()
+
 session = requests.Session()
 headers = {
     "Content_Type":"application/json",
@@ -13,7 +17,7 @@ headers = {
 # %%
 #AUTENTICAR
 
-token = '47255cb8c8fc03bfdc7e7289afa121f8141d05e03036bf4826ef5358e97c6d90'
+token = os.getenv("MEU_TOKEN")
 url_base='https://api.olhovivo.sptrans.com.br/v2.1/'
 
 r = session.post(url_base+'Login/Autenticar?token='+token,headers=headers)
