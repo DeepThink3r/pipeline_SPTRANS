@@ -29,8 +29,18 @@ def _get(path):
 # %%
 ## PEGAR LINHA
 
-line = _get("Linha/Buscar?termosBusca=2")
-j = json.dumps(line,ensure_ascii=True)
+termos_de_busca = [str(i) for i in range(1,100)]
+resultados_combinados = []
+
+for termo in termos_de_busca:
+    line = _get(f"Linha/Buscar?termosBusca={termo}")
+    resultados_combinados.extend(line)
+
+## REMOÇÃO DE DUPLICATAS
+resultados_unicos = {linha['cl']: linha for linha in resultados_combinados}.values()
+
+##RESULTADO
+j = json.dumps(list(resultados_unicos),ensure_ascii=True)
 data = json.loads(j)
 print(data)
 # %%
