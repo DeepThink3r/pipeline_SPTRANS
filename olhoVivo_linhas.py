@@ -1,46 +1,45 @@
-# %%
 import requests
+import os
 import json
-import time
+from dotenv import load_dotenv
 
-# %%
+# Carregar as variáveis de ambiente
+load_dotenv()
+
+token = os.getenv('MEU_TOKEN')
 session = requests.Session()
+url_base = "https://api.olhovivo.sptrans.com.br/v2.1/"
 headers = {
-    "Content_Type":"application/json",
-    "Accept":"application/json"
+    'Content-Type': 'application/json',
+    'Accept': 'application/json'
+}
+endpoint_token = "Login/Autenticar?"
+params = {
+    'token': token
 }
 
-# %%
-#AUTENTICAR
+# Autenticação
+r = session.post(f'{url_base}{endpoint_token}', params=params, headers=headers)
 
-token = '47255cb8c8fc03bfdc7e7289afa121f8141d05e03036bf4826ef5358e97c6d90'
-url_base='https://api.olhovivo.sptrans.com.br/v2.1/'
+if r.json() == True:
+    # Puxar os dados
+    endpoint_linha = 'Linha/Buscar?'
+    resultados_combinados = []
 
-r = session.post(url_base+'Login/Autenticar?token='+token,headers=headers)
+    for i in range(1, 100):
+        params = {'termosBusca': str(i)}
+        response = session.get(url_base + endpoint_linha, params=params, headers=headers)
+        if response.status_code == 200:
+            resultados_combinados.extend(response.json())
+        else:
+            print(f'Erro na requisição para termosBusca={i}: {response.status_code}')
 
-# %%
-## Função GET
+    # Remoção de duplicatas
+    resultados_unicos = {linha['cl']: linha for linha in resultados_combinados}.values()
 
-def _get(path):
-    response = session.get(url_base+path)
-    data = response.json()
-    return data
-
-# %%
-## PEGAR LINHA
-
-termos_de_busca = [str(i) for i in range(1,100)]
-resultados_combinados = []
-
-for termo in termos_de_busca:
-    line = _get(f"Linha/Buscar?termosBusca={termo}")
-    resultados_combinados.extend(line)
-
-## REMOÇÃO DE DUPLICATAS
-resultados_unicos = {linha['cl']: linha for linha in resultados_combinados}.values()
-
-##PRINT RESULTADO
-j = json.dumps(list(resultados_unicos),ensure_ascii=True)
-data = json.loads(j)
-print(data)
-# %%
+    # Resultado
+    j = json.dumps(list(resultados_unicos), ensure_ascii=True)
+    data = json.loads(j)
+    print(data)
+else:
+    print('Falha na autenticação')
