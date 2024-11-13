@@ -1,3 +1,5 @@
+#%%
+##Importando bibliotecas
 import requests
 import os
 import json
