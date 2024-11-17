@@ -16,12 +16,9 @@ headers = {
     'Accept': 'application/json'
 }
 endpoint_token = "Login/Autenticar?"
-params = {
-    'token': token
-}
 
 # Autenticação
-r = session.post(f'{url_base}{endpoint_token}', params=params, headers=headers)
+r = session.post(url_base+endpoint_token+'token='+token, headers=headers)
 
 if r.json() == True:
     # Puxar os dados
